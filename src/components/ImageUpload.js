@@ -30,7 +30,7 @@ const ImageUpload = ({ onImageSelect, selectedImage }) => {
   }, []);
 
   const onLoad = useCallback((img) => {
-    imgRef.current = img;
+    imgRef.current = img.currentTarget;
   }, []);
 
   const generateCroppedImage = useCallback(() => {
@@ -41,6 +41,12 @@ const ImageUpload = ({ onImageSelect, selectedImage }) => {
     const image = imgRef.current;
     const canvas = previewCanvasRef.current;
     const crop = completedCrop;
+
+    // Validate that the image is actually loaded
+    if (!image.complete || !image.naturalWidth || !image.naturalHeight) {
+      alert('Image is still loading. Please wait and try again.');
+      return;
+    }
 
     const scaleX = image.naturalWidth / image.width;
     const scaleY = image.naturalHeight / image.height;

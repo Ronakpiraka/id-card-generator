@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
-import barbarianLogo from '../assets/barb-old-logo 4.png';
+import barbarianLogo from '../assets/barb-old-logo-4.png';
 
 const IDCardPreview = ({ userImage, userData, onBack }) => {
   const frontCardRef = useRef(null);
@@ -121,14 +121,30 @@ const IDCardPreview = ({ userImage, userData, onBack }) => {
         <div ref={frontCardRef} className="id-card front-card" style={getBackgroundStyle()}>
           <div className="card-header">
             <div className="logo">
-              <img src={barbarianLogo} alt="Barbarian Logo" className="logo-image" />
+              <img 
+                src={barbarianLogo} 
+                alt="Barbarian Logo" 
+                className="logo-image" 
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                  console.error('Logo failed to load');
+                }}
+              />
             </div>
           </div>
           
           <div className="card-content">
             <div className="photo-section">
               <div className="photo-frame">
-                <img src={userImage} alt="User" className="user-photo" />
+                <img 
+                  src={userImage} 
+                  alt="User" 
+                  className="user-photo" 
+                  onError={(e) => {
+                    e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiNmMGYwZjAiLz48dGV4dCB4PSI1MCIgeT0iNTUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+Tm8gSW1hZ2U8L3RleHQ+PC9zdmc+';
+                    console.error('User photo failed to load');
+                  }}
+                />
               </div>
             </div>
             
@@ -147,7 +163,15 @@ const IDCardPreview = ({ userImage, userData, onBack }) => {
         <div ref={backCardRef} className="id-card back-card" style={getBackgroundStyle()}>
           <div className="card-header">
             <div className="logo">
-              <img src={barbarianLogo} alt="Barbarian Logo" className="logo-image" />
+              <img 
+                src={barbarianLogo} 
+                alt="Barbarian Logo" 
+                className="logo-image" 
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                  console.error('Logo failed to load');
+                }}
+              />
             </div>
           </div>
 
