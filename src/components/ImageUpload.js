@@ -6,7 +6,10 @@ const ImageUpload = ({ onImageSelect, selectedImage }) => {
   const [src, setSrc] = useState(null);
   const [crop, setCrop] = useState({
     unit: '%',
-    width: 90,
+    width: 60,
+    height: 80,
+    x: 20,
+    y: 10,
     aspect: 3/4, // Passport photo aspect ratio
   });
   const [completedCrop, setCompletedCrop] = useState(null);
@@ -31,6 +34,23 @@ const ImageUpload = ({ onImageSelect, selectedImage }) => {
 
   const onLoad = useCallback((img) => {
     imgRef.current = img.currentTarget;
+    
+    // Initialize crop to center of image
+    const cropWidth = 60;
+    const cropHeight = 80;
+    const x = (100 - cropWidth) / 2;
+    const y = (100 - cropHeight) / 2;
+    
+    const newCrop = {
+      unit: '%',
+      width: cropWidth,
+      height: cropHeight,
+      x: x,
+      y: y,
+      aspect: 3/4
+    };
+    
+    setCrop(newCrop);
   }, []);
 
   const generateCroppedImage = useCallback(() => {
@@ -102,11 +122,12 @@ const ImageUpload = ({ onImageSelect, selectedImage }) => {
         <div className="crop-section">
           <ReactCrop
             crop={crop}
-            onChange={(_, percentCrop) => setCrop(percentCrop)}
-            onComplete={(c) => setCompletedCrop(c)}
+            onChange={(newCrop, percentageCrop) => setCrop(percentageCrop)}
+            onComplete={(newCrop) => setCompletedCrop(newCrop)}
             aspect={3/4}
-            minWidth={100}
-            minHeight={133}
+            minWidth={50}
+            minHeight={67}
+            keepSelection={true}
           >
             <img
               ref={imgRef}
@@ -116,8 +137,12 @@ const ImageUpload = ({ onImageSelect, selectedImage }) => {
               onLoad={onLoad}
             />
           </ReactCrop>
-          <button onClick={generateCroppedImage} className="crop-btn">
-            Crop & Save Image
+          <button 
+            onClick={generateCroppedImage} 
+            className="crop-btn"
+            disabled={!completedCrop}
+          >
+            {completedCrop ? 'Crop & Save Image' : 'Select crop area first'}
           </button>
         </div>
       )}
